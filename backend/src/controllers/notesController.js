@@ -1,5 +1,5 @@
-export function getAllNotes(_, res) {
-  res.status(200).send('You have 5 notes');
+export function getAllNotes(req, res) {
+  res.status(200).send('You just fetched the notes');
 }
 
 export function createNote(req, res) {
