@@ -1,17 +1,17 @@
 import { useState } from 'react';
 import { ArrowLeftIcon } from 'lucide-react';
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import NavBar from '../components/NavBar';
 import toast from 'react-hot-toast';
-import axios from 'axios';
+import api from '../lib/axios.js';
 
 const CreatePage = () => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
-    // fetch -> axios.post
     e.preventDefault();
 
     if (!title.trim() || !content.trim()) {
@@ -21,20 +21,33 @@ const CreatePage = () => {
 
     setLoading(true);
     try {
-      await axios.post('/api/notes/', {
-        title,
-        content,
+      await api.post('/notes/', {
+        title: title,
+        content: content,
       });
+
+      toast.success('Note created successfully!');
+      navigate('/');
     } catch (error) {
       console.error('Error creating the note', error);
+      if (error.response.status === 429) {
+        toast.error("Slow down! You're creating notes too fast", {
+          duration: 4000,
+          icon: '💀',
+        });
+      } else {
+        toast.error('Failed to create note');
+      }
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-base-200">
+    <div className="min-h-screen">
       <NavBar />
       <div className="container mx-auto px-4 py-8">
-        <div className="max-w-2xl-mx-auto">
+        <div className="max-w-2xl mx-auto">
           <Link to={'/'} className="btn btn-ghost mb-6">
             <ArrowLeftIcon className="size-5" />
             Back to Notes
@@ -52,8 +65,8 @@ const CreatePage = () => {
                   </label>
                   <input
                     type="text"
-                    placeholder="Type here"
-                    className="input input-bordered w-full max-w-xs"
+                    placeholder="Note Title"
+                    className="input input-bordered"
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
                   />
@@ -61,18 +74,17 @@ const CreatePage = () => {
 
                 <div className="form-control mb-4">
                   <label className="label">
-                    <span className="label-text">Title</span>
+                    <span className="label-text">Content</span>
                   </label>
                   <textarea
-                    type="text"
-                    placeholder="Write your note here"
+                    placeholder="Write your note here..."
                     className="textarea textarea-bordered h-32"
                     value={content}
                     onChange={(e) => setContent(e.target.value)}
                   />
                 </div>
 
-                <div className="card-action justify-end">
+                <div className="card-actions justify-end">
                   <button
                     type="submit"
                     className="btn btn-primary"
