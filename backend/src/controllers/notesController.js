@@ -3,7 +3,7 @@ import Note from '../models/Note.js';
 export async function getAllNotes(_, res) {
   try {
     const notes = await Note.find().sort({ createdAt: -1 }); // newest first
-    console.log(notes);
+    // console.log(notes);
     // notes [{}, {}]
     res.status(200).json(notes);
   } catch (error) {
@@ -26,7 +26,7 @@ export async function getNoteById(req, res) {
 
 export async function createNote(req, res) {
   try {
-    console.log(req.body);
+    // console.log(req.body);
     const { title, content } = req.body;
     const note = new Note({ title, content });
     const savedNote = await note.save();

@@ -15,8 +15,8 @@ const HomePage = () => {
     const fetchNotes = async () => {
       try {
         // axios uses JSON.parse() under the hood, I don't need res.json() anymore
+
         const res = await api.get('/notes');
-        console.log(res.data);
         setNotes(res.data);
         setIsRateLimited(false);
       } catch (error) {
@@ -42,7 +42,7 @@ const HomePage = () => {
       <div className="mx-auto max-w-7xl p-4 mt-6">
         {loading && (
           <div className="text-center text-primary py-10 flex justify-center gap-4">
-            <Loader className="size-6 text-primary animate-spin" />
+            <Loader className="size-8 text-primary animate-spin" />
             Loading notes...
           </div>
         )}
