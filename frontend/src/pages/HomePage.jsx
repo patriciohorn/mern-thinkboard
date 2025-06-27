@@ -38,7 +38,7 @@ const HomePage = () => {
   return (
     <div className="min-h-screen">
       <NavBar />
-      <h1>Wazaaaaa</h1>
+
       {isRateLimited && <RateLimitedUI />}
 
       <div className="mx-auto max-w-7xl p-4 mt-6">
