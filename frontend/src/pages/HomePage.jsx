@@ -5,6 +5,7 @@ import toast from 'react-hot-toast';
 import NoteCard from '../components/NoteCard';
 import { Loader } from 'lucide-react';
 import api from '../lib/axios';
+import NotesNotFound from '../components/NotesNotFound';
 
 const HomePage = () => {
   const [isRateLimited, setIsRateLimited] = useState(false);
@@ -34,17 +35,21 @@ const HomePage = () => {
 
     fetchNotes();
   }, []);
-
   return (
     <div className="min-h-screen">
       <NavBar />
       {isRateLimited && <RateLimitedUI />}
+
       <div className="mx-auto max-w-7xl p-4 mt-6">
-        {loading && (
+        {notes.length > 0 && loading && !isRateLimited && (
           <div className="text-center text-primary py-10 flex justify-center gap-4">
             <Loader className="size-8 text-primary animate-spin" />
             Loading notes...
           </div>
+        )}
+
+        {notes.length === 0 && !isRateLimited && (
+          <NotesNotFound></NotesNotFound>
         )}
         {notes.length > 0 && !isRateLimited && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
